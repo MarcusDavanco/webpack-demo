@@ -4,12 +4,15 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   mode: 'development',
   entry: {
-    index: './src/index.js',
-    print: './src/print.js',
-  },
-  devtool: 'inline-source-map',
-  devServer: {
-    contentBase: './dist',
+    index: {
+      import: './src/index.js',
+      dependOn: 'shared',
+    },
+    another: {
+      import: './src/another-module.js',
+      dependOn: 'shared',
+    },
+    shared: 'lodash',
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -17,10 +20,11 @@ module.exports = {
     }),
   ],
   output: {
-    filename: 'bundle.js',
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
     clean: true,
-    publicPath: '/',
+  },
+  optimization: {
+    runtimeChunk: 'single',
   },
 };
